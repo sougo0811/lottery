@@ -1,8 +1,7 @@
 #抽選
-import math
 import random
 
-N = 10
+N = 20
 def lottery_A():
   win_numbers_A = []
   for i in range(N):
@@ -28,6 +27,10 @@ def lottery_B():
     win_numbers_B.append(win_num)
   return win_numbers_B
 
+def lottery_test():
+  win_numbers_test = [123456,111111,222222,333333,444444,555555,666666,777777,888888,999999]
+  return win_numbers_test
+
 #print(lottery_A())
 #print(lottery_B())
-
+#print(lottery_test())

@@ -20,6 +20,8 @@ button.place(x = 200, y = 250)
 
 app.mainloop()
 """
+
+"""
 import tkinter as tk
 
 def main():
@@ -49,3 +51,21 @@ def main():
 
 if __name__ == "__main__":
     main()
+"""
+
+import tkinter as tk
+
+
+def insert(event):
+    entry1.configure(state='normal')
+    entry1.insert('end', 'hello')
+    entry1.configure(state='readonly')
+
+
+root = tk.Tk()
+label1 = tk.Label(root, text="利用者ID",width=10,height=2,bd=1,relief="ridge")
+label1.grid(row=1,column=1,padx=10)
+entry1 = tk.Entry(root,text="",width=15)
+entry1.grid(row=1,column=2,ipady=5,pady=10,padx=10)
+root.bind('<Escape>', insert)  # テキストを挿入する
+root.mainloop()
