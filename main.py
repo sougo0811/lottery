@@ -77,6 +77,18 @@ def lottery_btn():
       result_canvas.create_text(90, m, font=("sans-serif", 10), text=lottery_number)
       with open("./text_file/lottery_number.txt", mode="a", encoding="utf-8") as f:
         f.write(str(lottery_number)+"\n")
+      lottery_number = list(str(lottery_number))
+      with open("./text_file/win_one.txt", mode="a", encoding="utf-8") as f:
+        win_one = "".join(lottery_number[0:6:])
+        f.write(str(win_one)+"\n")
+      with open("./text_file/win_two.txt", mode="a", encoding="utf-8") as f:
+        win_two = "".join(lottery_number[1:6:])
+        f.write(str(win_two)+"\n")
+      with open("./text_file/win_three.txt", mode="a", encoding="utf-8") as f:
+        win_three = "".join(lottery_number[2:6:])
+        f.write(str(win_three)+"\n")
+      #print(lottery_number)
+      
     print("抽選しました")
     select_flg = False
   else:
@@ -84,8 +96,14 @@ def lottery_btn():
     print("抽選番号の未入力及び複数回の抽選はできません")
 
 def lottery_check_btn():
-  your_list = []
-  lottery_nums = []
+  #your_list = []
+  your_one = []
+  your_two = []
+  your_three = []
+  #lottery_nums = []
+  win_ones = []
+  win_twos = []
+  win_threes = []
   global select_flg
   global lottery_check_flg
   global lottey_label
@@ -93,19 +111,41 @@ def lottery_check_btn():
     with open("./text_file/select_number.txt", mode="r", encoding="utf-8") as f:
       next(f)
       for i, s in enumerate(f, start=2):
-        your_list.append(int(s))
-        #print(int(s))
+        #your_list.append(s)
+        your_one.append("".join(list(s[0:6:])))
+        your_two.append("".join(list(s[1:6:])))
+        your_three.append("".join(list(s[2:6:])))
+      your_one = list(set(your_one))
+      your_two = list(set(your_two))
+      your_three = list(set(your_three))
     with open("./text_file/lottery_number.txt", mode="r", encoding="utf-8") as f:
       next(f)
       for i, s in enumerate(f, start=2):
-        lottery_nums.append(int(s))
-        #print(int(s))
-    #print(your_list[0])
-    #print(lottery_nums[0])
+        win_ones.append(s[0:6:])
+        win_twos.append(s[1:6:])
+        win_threes.append(s[2:6:])
+      win_ones = list(set(win_ones))
+      win_twos = list(set(win_twos))
+      win_threes = list(set(win_threes))
     win_cnt = 0
-    for lottery_num in lottery_nums:
-      if lottery_num in your_list:
+    win_one_cnt = 0
+    win_two_cnt = 0
+    win_three_cnt = 0
+    for win_one in win_ones:
+      if win_one in your_one:
         win_cnt += 1
+        win_one_cnt += 1
+    for win_two in win_twos:
+      if win_two in your_two:
+        win_cnt += 1
+        win_two_cnt += 1
+    for win_three in win_threes:
+      if win_three in your_three:
+        win_cnt += 1
+        win_three_cnt += 1
+    if win_cnt != win_one_cnt + win_two_cnt + win_two_cnt:
+      messagebox.showerror("エラー", "不正抽選の可能性があります")
+      print("エラー")
     if win_cnt >= 1:
       lottey_label = tkinter.Label(tab_home, font=("sans-serif", 30), text= "当選！", foreground="red", background="white")
       lottey_label.place(x = 35, y = 30)
@@ -142,6 +182,12 @@ def reset_btn():
     fw.write("あなたの抽選番号\n")
   with open("./text_file/lottery_number.txt", mode="w", encoding="utf-8") as fw:
     fw.write("抽選番号\n")
+  with open("./text_file/win_one.txt", mode="w", encoding="utf-8") as fw:
+    fw.write("1等賞\n")
+  with open("./text_file/win_two.txt", mode="w", encoding="utf-8") as fw:
+    fw.write("2等賞\n")
+  with open("./text_file/win_three.txt", mode="w", encoding="utf-8") as fw:
+    fw.write("3等賞\n")
   lottey_label.place_forget()
   select_canvas.delete("all")
   result_canvas.delete("all")
@@ -162,13 +208,19 @@ with open("./text_file/select_number.txt", mode="w", encoding="utf-8") as fw:
   fw.write("あなたの抽選番号\n")
 with open("./text_file/lottery_number.txt", mode="w", encoding="utf-8") as fw:
   fw.write("抽選番号\n")
+with open("./text_file/win_one.txt", mode="w", encoding="utf-8") as fw:
+  fw.write("1等賞\n")
+with open("./text_file/win_two.txt", mode="w", encoding="utf-8") as fw:
+  fw.write("2等賞\n")
+with open("./text_file/win_three.txt", mode="w", encoding="utf-8") as fw:
+  fw.write("3等賞\n")
 select_flg = True
 lottery_check_flg = True
 candidateA_flg = True
 candidateB_flg = True
 n = 15
 m = 15
-num_win = 10
+num_win = 5
 root = tkinter.Tk()
 root.title("宝くじ")
 root.geometry("600x450")
@@ -233,8 +285,8 @@ num_win_label.place(x=10, y=10)
 
 var = tkinter.IntVar(root)
 var.set(num_win)
-spinbox = tkinter.Spinbox(tab_setting, width=5, font=("sans-serif", 15), textvariable=var, from_=1, to=20, increment=1, command=lambda:num_win_check(var.get()))
-
+spinbox = tkinter.Spinbox(tab_setting, width=5, font=("sans-serif", 15), textvariable=var, from_=1, to=10, increment=1, command=lambda:num_win_check(var.get()))
+spinbox.configure(state="readonly")
 spinbox.place(x=10, y=40)
 
 root.mainloop()
