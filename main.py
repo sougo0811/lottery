@@ -8,6 +8,18 @@ from lottery import lottery_A,lottery_B,lottery_test
 #import time
 #import sys
 
+#ノーマルモード
+def normal_btn():
+  global develop_flg
+  develop_flg = False
+  print("ノーマルモード")
+  
+#開発モード
+def develop_btn():
+  global develop_flg
+  develop_flg = True
+  print("開発モード")
+
 #ホーム関数
 def limit_char(string):
     return len(string) <= 6
@@ -58,23 +70,31 @@ def numcheck_btn():
         print("存在し得ないエラー")
       return your_selects
   else:
+    entry.delete(0, tkinter.END)
     messagebox.showwarning("現在の状況では追加できません", "抽選後の番号の追加はできません")
     print("抽選後の番号の追加はできません")
 
 def lottery_btn():
   global your_selects
   global select_flg
+  global develop_flg
   global candidate_numbers
   global m
   if len(your_selects) >= 1 and select_flg == True:
-    candidate_numbers.extend(lottery_A())
-    candidate_numbers.extend(lottery_B())
-    candidate_numbers.extend(lottery_test())
-    lottery_numbers = random.sample(candidate_numbers,num_win)
-    #lottery_numbers = lottery_test()
+    if develop_flg == False:
+      candidate_numbers.extend(lottery_A())
+      candidate_numbers.extend(lottery_B())
+      lottery_numbers = random.sample(candidate_numbers,num_win)
+    elif develop_flg == True:
+      candidate_numbers.extend(lottery_test())
+      lottery_numbers = random.sample(candidate_numbers,num_win-1)
+      lottery_numbers.append(int(123456))
     for lottery_number in lottery_numbers:
       m += 20
       result_canvas.create_text(90, m, font=("sans-serif", 10), text=lottery_number)
+      one_canvas.create_text(90, m, font=("sans-serif", 10), text=list(str(lottery_number)[0:6:]))
+      two_canvas.create_text(90, m, font=("sans-serif", 10), text=list(str(lottery_number)[1:6:]))
+      three_canvas.create_text(90, m, font=("sans-serif", 10), text=list(str(lottery_number)[2:6:]))
       with open("./text_file/lottery_number.txt", mode="a", encoding="utf-8") as f:
         f.write(str(lottery_number)+"\n")
       lottery_number = list(str(lottery_number))
@@ -108,6 +128,12 @@ def lottery_check_btn():
   global lottery_check_flg
   global lottey_label
   if lottery_check_flg == True and select_flg == False:
+    one_canvas.delete("all")
+    two_canvas.delete("all")
+    three_canvas.delete("all")
+    one_canvas.create_text(90, 10, font=("sans-serif", 10), text="1等賞")
+    two_canvas.create_text(90, 10, font=("sans-serif", 10), text="2等賞")
+    three_canvas.create_text(90, 10, font=("sans-serif", 10), text="3等賞")
     with open("./text_file/select_number.txt", mode="r", encoding="utf-8") as f:
       next(f)
       for i, s in enumerate(f, start=2):
@@ -131,19 +157,34 @@ def lottery_check_btn():
     win_one_cnt = 0
     win_two_cnt = 0
     win_three_cnt = 0
+    m = 15
     for win_one in win_ones:
+      m += 20
       if win_one in your_one:
         win_cnt += 1
         win_one_cnt += 1
+        one_canvas.create_text(90, m, font=("sans-serif", 10), fill="red", text=list(str(win_one)))
+      else:
+        one_canvas.create_text(90, m, font=("sans-serif", 10), fill="blue", text=list(str(win_one)))
+    m = 15
     for win_two in win_twos:
+      m += 20
       if win_two in your_two:
         win_cnt += 1
         win_two_cnt += 1
+        two_canvas.create_text(90, m, font=("sans-serif", 10), fill="red", text=list(str(win_two)))
+      else:
+        two_canvas.create_text(90, m, font=("sans-serif", 10), fill="blue", text=list(str(win_two)))
+    m = 15
     for win_three in win_threes:
+      m += 20
       if win_three in your_three:
         win_cnt += 1
         win_three_cnt += 1
-    if win_cnt != win_one_cnt + win_two_cnt + win_two_cnt:
+        three_canvas.create_text(90, m, font=("sans-serif", 10), fill="red", text=list(str(win_three)))
+      else:
+        three_canvas.create_text(90, m, font=("sans-serif", 10), fill="blue", text=list(str(win_three)))
+    if win_cnt != win_one_cnt + win_two_cnt + win_three_cnt:
       messagebox.showerror("エラー", "不正抽選の可能性があります")
       print("エラー")
     if win_cnt >= 1:
@@ -178,6 +219,7 @@ def reset_btn():
   select_flg = True
   candidate_numbers = []
   lottery_check_flg = True
+  entry.delete(0, tkinter.END)
   with open("./text_file/select_number.txt", mode="w", encoding="utf-8") as fw:
     fw.write("あなたの抽選番号\n")
   with open("./text_file/lottery_number.txt", mode="w", encoding="utf-8") as fw:
@@ -191,8 +233,14 @@ def reset_btn():
   lottey_label.place_forget()
   select_canvas.delete("all")
   result_canvas.delete("all")
+  one_canvas.delete("all")
+  two_canvas.delete("all")
+  three_canvas.delete("all")
   select_canvas.create_text(90, 10, font=("sans-serif", 10), text="あなたの入力した数字")
   result_canvas.create_text(90, 10, font=("sans-serif", 10), text="当選番号")
+  one_canvas.create_text(90, 10, font=("sans-serif", 10), text="1等賞")
+  two_canvas.create_text(90, 10, font=("sans-serif", 10), text="2等賞")
+  three_canvas.create_text(90, 10, font=("sans-serif", 10), text="3等賞")
   print("リセット完了")
 
 #設定関数
@@ -218,6 +266,7 @@ select_flg = True
 lottery_check_flg = True
 candidateA_flg = True
 candidateB_flg = True
+develop_flg = False
 n = 15
 m = 15
 num_win = 5
@@ -278,6 +327,38 @@ result_canvas.config(scrollregion=(0, 0, 0, 2000))
 result_canvas.create_text(90, 10, font=("sans-serif", 10), text="当選番号")
 
 #抽選詳細
+one_canvas = tkinter.Canvas(tab_details, bg="white")
+one_canvas.place(x=0, y=10, width=190, height=180)
+
+bar_y = tkinter.Scrollbar(one_canvas, orient=tkinter.VERTICAL)
+bar_y.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+bar_y.config(command=one_canvas.yview)
+one_canvas.config(yscrollcommand=bar_y.set)
+one_canvas.config(scrollregion=(0, 0, 0, 2000))
+
+one_canvas.create_text(90, 10, font=("sans-serif", 10), text="1等賞")
+
+two_canvas = tkinter.Canvas(tab_details, bg="white")
+two_canvas.place(x=190, y=10, width=190, height=180)
+
+bar_y = tkinter.Scrollbar(two_canvas, orient=tkinter.VERTICAL)
+bar_y.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+bar_y.config(command=two_canvas.yview)
+two_canvas.config(yscrollcommand=bar_y.set)
+two_canvas.config(scrollregion=(0, 0, 0, 2000))
+
+two_canvas.create_text(90, 10, font=("sans-serif", 10), text="2等賞")
+
+three_canvas = tkinter.Canvas(tab_details, bg="white")
+three_canvas.place(x=380, y=10, width=190, height=180)
+
+bar_y = tkinter.Scrollbar(three_canvas, orient=tkinter.VERTICAL)
+bar_y.pack(side=tkinter.RIGHT, fill=tkinter.Y)
+bar_y.config(command=three_canvas.yview)
+three_canvas.config(yscrollcommand=bar_y.set)
+three_canvas.config(scrollregion=(0, 0, 0, 2000))
+
+three_canvas.create_text(90, 10, font=("sans-serif", 10), text="3等賞")
 
 #設定タブ
 num_win_label = tkinter.Label(tab_setting, font=("sans-serif", 15), text= "当選番号数", foreground="black", background="white")
@@ -287,7 +368,13 @@ var = tkinter.IntVar(root)
 var.set(num_win)
 spinbox = tkinter.Spinbox(tab_setting, width=5, font=("sans-serif", 15), textvariable=var, from_=1, to=10, increment=1, command=lambda:num_win_check(var.get()))
 spinbox.configure(state="readonly")
-spinbox.place(x=10, y=40)
+spinbox.place(x=25, y=40)
+
+button_normal = tkinter.Button(tab_setting, height = 3, width = 15, text="ノーマルモード", command=normal_btn)
+button_normal.place(x=250, y=10)
+
+button_develop = tkinter.Button(tab_setting, height = 3, width = 15, text="開発モード", command=develop_btn)
+button_develop.place(x=400, y=10)
 
 root.mainloop()
 

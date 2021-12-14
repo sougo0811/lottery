@@ -28,7 +28,7 @@ def lottery_B():
   return win_numbers_B
 
 def lottery_test():
-  win_numbers_test = [123456,111111,222222,333333,444444,555555,666666,777777,888888,999999]
+  win_numbers_test = [111111,222222,333333,444444,555555,666666,777777,888888,999999]
   return win_numbers_test
 
 #print(lottery_A())
