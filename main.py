@@ -199,7 +199,7 @@ def lottery_check_btn():
     print("当選数"+str(win_cnt))
   else:
     messagebox.showwarning("現在の状況では確認できません", "抽選確認は、抽選後に一回だけできます")
-    print("抽選後に押してください")
+    print("抽選後に１回だけ押してください")
 
 
 def reset_btn():
@@ -264,8 +264,6 @@ with open("./text_file/win_three.txt", mode="w", encoding="utf-8") as fw:
   fw.write("3等賞\n")
 select_flg = True
 lottery_check_flg = True
-candidateA_flg = True
-candidateB_flg = True
 develop_flg = False
 n = 15
 m = 15
