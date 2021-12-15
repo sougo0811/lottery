@@ -5,8 +5,6 @@ import tkinter
 import tkinter.ttk as ttk
 from tkinter import messagebox
 from lottery import lottery_A,lottery_B,lottery_test
-#import time
-#import sys
 
 #ノーマルモード
 def normal_btn():
@@ -37,9 +35,9 @@ def check(your_select):
 def numcheck_btn():
   global your_selects
   global check
-  global n
+  global m
   global select_flg
-  
+
   if select_flg == True:
     try:
       your_select = int(entry.get())
@@ -52,8 +50,8 @@ def numcheck_btn():
       if check_ans[0] == True and check_ans[1] == True:
         your_selects.append(your_select)
         entry.delete(0, tkinter.END)
-        n += 20
-        select_canvas.create_text(90, n, font=("sans-serif", 10), text=your_select)
+        m += 20
+        select_canvas.create_text(90, m, font=("sans-serif", 10), text=your_select)
         with open("./text_file/select_number.txt",mode="a") as f:
           f.write(str(your_select)+"\n")
       elif check_ans[0] == False and check_ans[1] == True:
@@ -80,6 +78,7 @@ def lottery_btn():
   global develop_flg
   global candidate_numbers
   global m
+  m = 15
   if len(your_selects) >= 1 and select_flg == True:
     if develop_flg == False:
       candidate_numbers.extend(lottery_A())
@@ -208,13 +207,9 @@ def reset_btn():
   global candidate_numbers
   global lottery_check_flg
   global lottey_label
-  global n
   global m
-  #global num_win
   
-  n = 15
   m = 15
-  #num_win = 10
   your_selects = []
   select_flg = True
   candidate_numbers = []
@@ -249,7 +244,7 @@ def num_win_check(num):
   num_win = num
   return num_win
 
-
+#初期設定
 your_selects = []
 candidate_numbers = []
 with open("./text_file/select_number.txt", mode="w", encoding="utf-8") as fw:
@@ -265,7 +260,6 @@ with open("./text_file/win_three.txt", mode="w", encoding="utf-8") as fw:
 select_flg = True
 lottery_check_flg = True
 develop_flg = False
-n = 15
 m = 15
 num_win = 5
 root = tkinter.Tk()
@@ -326,7 +320,7 @@ result_canvas.create_text(90, 10, font=("sans-serif", 10), text="当選番号")
 
 #抽選詳細
 one_canvas = tkinter.Canvas(tab_details, bg="white")
-one_canvas.place(x=0, y=10, width=190, height=180)
+one_canvas.place(x=0, y=10, width=190, height=380)
 
 bar_y = tkinter.Scrollbar(one_canvas, orient=tkinter.VERTICAL)
 bar_y.pack(side=tkinter.RIGHT, fill=tkinter.Y)
@@ -337,7 +331,7 @@ one_canvas.config(scrollregion=(0, 0, 0, 2000))
 one_canvas.create_text(90, 10, font=("sans-serif", 10), text="1等賞")
 
 two_canvas = tkinter.Canvas(tab_details, bg="white")
-two_canvas.place(x=190, y=10, width=190, height=180)
+two_canvas.place(x=190, y=10, width=190, height=380)
 
 bar_y = tkinter.Scrollbar(two_canvas, orient=tkinter.VERTICAL)
 bar_y.pack(side=tkinter.RIGHT, fill=tkinter.Y)
@@ -348,7 +342,7 @@ two_canvas.config(scrollregion=(0, 0, 0, 2000))
 two_canvas.create_text(90, 10, font=("sans-serif", 10), text="2等賞")
 
 three_canvas = tkinter.Canvas(tab_details, bg="white")
-three_canvas.place(x=380, y=10, width=190, height=180)
+three_canvas.place(x=380, y=10, width=190, height=380)
 
 bar_y = tkinter.Scrollbar(three_canvas, orient=tkinter.VERTICAL)
 bar_y.pack(side=tkinter.RIGHT, fill=tkinter.Y)
@@ -375,9 +369,3 @@ button_develop = tkinter.Button(tab_setting, height = 3, width = 15, text="開�
 button_develop.place(x=400, y=10)
 
 root.mainloop()
-
-#your_select = list(map(int,input("6桁の数字を入力してください：").split()))
-
-
-
-
