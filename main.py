@@ -106,7 +106,6 @@ def lottery_btn():
       with open("./text_file/win_three.txt", mode="a", encoding="utf-8") as f:
         win_three = "".join(lottery_number[2:6:])
         f.write(str(win_three)+"\n")
-      #print(lottery_number)
       
     print("抽選しました")
     select_flg = False
@@ -115,11 +114,9 @@ def lottery_btn():
     print("抽選番号の未入力及び複数回の抽選はできません")
 
 def lottery_check_btn():
-  #your_list = []
   your_one = []
   your_two = []
   your_three = []
-  #lottery_nums = []
   win_ones = []
   win_twos = []
   win_threes = []
@@ -136,7 +133,6 @@ def lottery_check_btn():
     with open("./text_file/select_number.txt", mode="r", encoding="utf-8") as f:
       next(f)
       for i, s in enumerate(f, start=2):
-        #your_list.append(s)
         your_one.append("".join(list(s[0:6:])))
         your_two.append("".join(list(s[1:6:])))
         your_three.append("".join(list(s[2:6:])))
@@ -280,7 +276,6 @@ entry = tkinter.Entry(tab_home, width = 6, font=("sans-serif", 30), validate="ke
 entry.place(x=35, y=100)
 
 button_add = tkinter.Button(tab_home, height = 3, width = 15, text="追加", command=numcheck_btn)
-#button.bind("<Return>", lambda event: click_btn)
 button_add.place(x=40, y=160)
 
 button_lot = tkinter.Button(tab_home, height = 3, width = 15, text="抽選", command=lottery_btn)
