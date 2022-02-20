@@ -21,3 +21,5 @@
 1等賞  当選番号と全く同じ（下6桁が同じ）
 2等賞  当選番号と下5桁が同じ
 3等賞  当選番号と下4桁が同じ
+
+アプリのダウンロードは<strong>[ここから](https://github.com/sougo0811/lottery/files/8103566/lottery.zip)</strong>
